@@ -31,6 +31,14 @@ export const BusStateEditor: FC<IEditBusState> = ({
 	const { totalSeatsEditor, peopleOnBusEditor, currentlyEditing } = editBusState;
 	const { peopleOnBus } = busState;
 
+	const resetBusState = () => {
+		setEditBusState({
+			...editBusState,
+			totalSeatsEditor: "",
+			peopleOnBusEditor: "",
+		});
+	};
+
 	return (
 		<form>
 			<input
@@ -64,19 +72,22 @@ export const BusStateEditor: FC<IEditBusState> = ({
 					e.preventDefault();
 
 					if (!/^\d+$/.test(totalSeatsEditor) || !/^\d+$/.test(peopleOnBusEditor)) {
-						alert("Only numbers");
+						alert("Only numbers and make sure all fields entered.");
+						resetBusState();
 						return;
 					}
 					let seatsEditorAsNumber = parseInt(totalSeatsEditor);
 					let peopleOnBusEditorAsNumber = parseInt(peopleOnBusEditor);
 
 					if (seatsEditorAsNumber < peopleOnBus) {
-						alert("Cannot make total seats less than people currently on bus");
+						alert("Cannot make total seats less than people currently on bus.");
+						resetBusState();
 						return;
 					}
 
 					if (seatsEditorAsNumber < peopleOnBusEditorAsNumber) {
 						alert("Cannot make total seats less than people on bus");
+						resetBusState();
 						return;
 					}
 
@@ -92,6 +103,15 @@ export const BusStateEditor: FC<IEditBusState> = ({
 					});
 				}}>
 				Confirm Change
+			</button>
+			<button
+				onClick={() =>
+					setEditBusState({
+						...editBusState,
+						currentlyEditing: !currentlyEditing,
+					})
+				}>
+				Cancel
 			</button>
 		</form>
 	);

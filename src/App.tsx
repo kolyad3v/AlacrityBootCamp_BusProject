@@ -1,35 +1,42 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [busState, setBusState] = useState<{
+		availableSeats: number
+		totalSeats: number
+	}>({
+		availableSeats: 10,
+		totalSeats: 20,
+	})
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const [passengersWaitingAtBusStop, setPassengersWaitingAtBusStop] =
+		useState<number>()
+	const handleBusStopPassengerNumber = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		if (/\d+/.test(e.target.value))
+			setPassengersWaitingAtBusStop(parseInt(e.target.value))
+	}
+
+	return (
+		<>
+			<h1>Vite + React</h1>
+			<div className="card">
+				<p>Available Bus Seats: {busState.availableSeats}</p>
+			</div>
+
+			<div className="card">
+				<p>Bus Stop</p>
+				<p>People waiting: {passengersWaitingAtBusStop}</p>
+				<input
+					type="text"
+					value={passengersWaitingAtBusStop}
+					onChange={(e) => handleBusStopPassengerNumber(e)}
+				/>
+			</div>
+		</>
+	)
 }
 
 export default App

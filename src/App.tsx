@@ -2,38 +2,37 @@ import { useState } from "react";
 import "./App.css";
 import BusStateEditor from "./components/BusStateEditor";
 import BusStop from "./components/BusStop";
+import { IBusState, IBusStateEditor } from "./types";
 
 function App() {
-	const [busState, setBusState] = useState<{
-		peopleOnBus: number;
-		totalSeats: number;
-	}>({
+	const [busState, setBusState] = useState<IBusState>({
 		peopleOnBus: 10,
 		totalSeats: 20,
 	});
 	const { peopleOnBus, totalSeats } = busState;
 
-	const [editBusState, setEditBusState] = useState<{
-		currentlyEditing: boolean;
-		totalSeatsEditor: string;
-		peopleOnBusEditor: string;
-	}>({
+	const [editBusState, setEditBusState] = useState<IBusStateEditor>({
 		currentlyEditing: false,
 		totalSeatsEditor: "",
 		peopleOnBusEditor: "",
 	});
 
-	const {
-		currentlyEditing,
-	}: {
-		currentlyEditing: boolean;
-		totalSeatsEditor: string;
-		peopleOnBusEditor: string;
-	} = editBusState;
+	const { currentlyEditing }: IBusStateEditor = editBusState;
 
 	const getAvailableSeats = (): number => {
 		return totalSeats - peopleOnBus;
 	};
+
+	const [numberOfBusStops, setNumberOfBusStops] = useState<number>(3);
+
+	const busStops = Array.from({ length: numberOfBusStops }, (_, index) => (
+		<BusStop
+			key={index}
+			busState={busState}
+			setBusState={setBusState}
+			getAvailableSeats={getAvailableSeats}
+		/>
+	));
 
 	return (
 		<>
@@ -59,11 +58,7 @@ function App() {
 					/>
 				)}
 			</div>
-			<BusStop
-				busState={busState}
-				setBusState={setBusState}
-				getAvailableSeats={getAvailableSeats}
-			/>
+			<div className="busStops">{busStops}</div>
 		</>
 	);
 }

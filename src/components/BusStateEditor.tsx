@@ -1,28 +1,14 @@
 import { FC } from "react";
+import { IBusState, IBusStateEditor } from "../types";
 
-interface IEditBusState {
-	busState: { peopleOnBus: number; totalSeats: number };
-	editBusState: {
-		currentlyEditing: boolean;
-		totalSeatsEditor: string;
-		peopleOnBusEditor: string;
-	};
-	setEditBusState: React.Dispatch<
-		React.SetStateAction<{
-			currentlyEditing: boolean;
-			totalSeatsEditor: string;
-			peopleOnBusEditor: string;
-		}>
-	>;
-	setBusState: React.Dispatch<
-		React.SetStateAction<{
-			peopleOnBus: number;
-			totalSeats: number;
-		}>
-	>;
+interface IProps {
+	busState: IBusState;
+	editBusState: IBusStateEditor;
+	setEditBusState: React.Dispatch<React.SetStateAction<IBusStateEditor>>;
+	setBusState: React.Dispatch<React.SetStateAction<IBusState>>;
 }
 
-export const BusStateEditor: FC<IEditBusState> = ({
+export const BusStateEditor: FC<IProps> = ({
 	busState,
 	editBusState,
 	setEditBusState,

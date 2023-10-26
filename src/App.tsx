@@ -13,7 +13,7 @@ function App() {
 		peopleOnBus: 10,
 		totalSeats: 20,
 	})
-	const { peopleOnBus, totalSeats } = busState
+	const { totalSeats } = busState
 
 	const [editBusState, setEditBusState] = useState<IBusStateEditor>({
 		currentlyEditing: false,
@@ -41,7 +41,7 @@ function App() {
 
 	return (
 		<>
-			<h1>Vite + React</h1>
+			<h1>Bus App</h1>
 			<div className='card bus'>
 				<p>People onboard: {totalSeats - getAvailableSeats(busState)}</p>{' '}
 				<p>Available Bus Seats: {getAvailableSeats(busState)}</p>{' '}

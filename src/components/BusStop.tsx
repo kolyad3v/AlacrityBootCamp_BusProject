@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react'
+import { IBusState } from '../types'
 interface IBusStop {
 	busState: { peopleOnBus: number; totalSeats: number }
 	setBusState: React.Dispatch<
@@ -7,7 +8,7 @@ interface IBusStop {
 			totalSeats: number
 		}>
 	>
-	getAvailableSeats: () => number
+	getAvailableSeats: (busState: IBusState) => number
 }
 
 const BusStop: FC<IBusStop> = ({
@@ -34,22 +35,16 @@ const BusStop: FC<IBusStop> = ({
 	}
 
 	const getPeopleRemainingOnBusAfterDisembarkment = (): number => {
-		return (
-			peopleOnBus - getPassengerDataAsNumber(passengersGettingOffAtThisStop)
-		)
+		return peopleOnBus - getPassengerDataAsNumber(passengersGettingOffAtThisStop)
 	}
 
-	const updateStateAfterMorePassengersThanSeats = (
-		passengers: number
-	): void => {
-		let passengersLeftOver = passengers - getAvailableSeats()
+	const updateStateAfterMorePassengersThanSeats = (passengers: number): void => {
+		let passengersLeftOver = passengers - getAvailableSeats(busState)
 		setPassengerBusStopData(passengersLeftOver)
 		setBusState({ ...busState, peopleOnBus: totalSeats })
 	}
 
-	const updateStateAfterLessPassengersThanSeats = (
-		passengers: number
-	): void => {
+	const updateStateAfterLessPassengersThanSeats = (passengers: number): void => {
 		let peopleOnBusAfterPassengersGetOn =
 			getPeopleRemainingOnBusAfterDisembarkment() + passengers
 		setBusState({ ...busState, peopleOnBus: peopleOnBusAfterPassengersGetOn })
@@ -70,7 +65,7 @@ const BusStop: FC<IBusStop> = ({
 		}
 
 		if (
-			getAvailableSeats() === 0 &&
+			getAvailableSeats(busState) === 0 &&
 			passengersGettingOff === 0 &&
 			passengersGettingOn > 0
 		) {
@@ -78,7 +73,7 @@ const BusStop: FC<IBusStop> = ({
 			return
 		}
 
-		if (passengersGettingOn > getAvailableSeats()) {
+		if (passengersGettingOn > getAvailableSeats(busState)) {
 			updateStateAfterMorePassengersThanSeats(passengersGettingOn)
 		} else {
 			updateStateAfterLessPassengersThanSeats(passengersGettingOn)
@@ -88,11 +83,11 @@ const BusStop: FC<IBusStop> = ({
 
 	return (
 		<>
-			<div className="card">
+			<div className='card'>
 				<p>Bus Stop</p>
 				<p>People waiting to get on: {passengersWaitingAtBusStop}</p>
 				<input
-					type="text"
+					type='text'
 					value={passengersWaitingAtBusStop}
 					onChange={(e) => setPassengersWaitingAtBusStop(e.target.value)}
 				/>
@@ -103,13 +98,13 @@ const BusStop: FC<IBusStop> = ({
 						: `There isn't anyone on the bus...`}
 				</p>
 				<input
-					type="text"
+					type='text'
 					max={peopleOnBus}
 					value={passengersGettingOffAtThisStop}
 					onChange={(e) => setPassengersGettingOffAtThisStop(e.target.value)}
 				/>
 				<button
-					className="busStop_button"
+					className='busStop_button'
 					onClick={handlePassengerChangeOverOnBusArrival}
 				>
 					Handle Bus Arrival

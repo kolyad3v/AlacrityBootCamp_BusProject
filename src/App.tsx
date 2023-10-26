@@ -1,30 +1,33 @@
-import { useState } from 'react'
-import './App.css'
-import BusStateEditor from './components/BusStateEditor'
-import BusStop from './components/BusStop'
-import { IBusState, IBusStateEditor } from './types'
-import BusStopSelector from './components/BusStopSelector'
+import { useState } from "react";
+import "./App.css";
+import BusStateEditor from "./components/BusStateEditor";
+import BusStop from "./components/BusStop";
+import { IBusState, IBusStateEditor } from "./types";
+import BusStopSelector from "./components/BusStopSelector";
 
 function App() {
-	const [busState, setBusState] = useState<IBusState>({
+	// Using Mapped Types for fun.
+	const [busState, setBusState] = useState<{
+		[K in keyof IBusState]: IBusState[K];
+	}>({
 		peopleOnBus: 10,
 		totalSeats: 20,
-	})
-	const { peopleOnBus, totalSeats } = busState
+	});
+	const { peopleOnBus, totalSeats } = busState;
 
 	const [editBusState, setEditBusState] = useState<IBusStateEditor>({
 		currentlyEditing: false,
-		totalSeatsEditor: '',
-		peopleOnBusEditor: '',
-	})
+		totalSeatsEditor: "",
+		peopleOnBusEditor: "",
+	});
 
-	const { currentlyEditing }: IBusStateEditor = editBusState
+	const { currentlyEditing }: IBusStateEditor = editBusState;
 
 	const getAvailableSeats = (): number => {
-		return totalSeats - peopleOnBus
-	}
+		return totalSeats - peopleOnBus;
+	};
 
-	const [numberOfBusStops, setNumberOfBusStops] = useState<number>(3)
+	const [numberOfBusStops, setNumberOfBusStops] = useState<number>(3);
 
 	const busStops = Array.from({ length: numberOfBusStops }, (_, index) => (
 		<BusStop
@@ -33,14 +36,14 @@ function App() {
 			setBusState={setBusState}
 			getAvailableSeats={getAvailableSeats}
 		/>
-	))
+	));
 
 	return (
 		<>
 			<h1>Vite + React</h1>
 			<div className="card bus">
-				<p>People onboard: {totalSeats - getAvailableSeats()}</p>{' '}
-				<p>Available Bus Seats: {getAvailableSeats()}</p>{' '}
+				<p>People onboard: {totalSeats - getAvailableSeats()}</p>{" "}
+				<p>Available Bus Seats: {getAvailableSeats()}</p>{" "}
 				<p>Total Seats: {totalSeats}</p>
 				{!currentlyEditing && (
 					<button
@@ -48,9 +51,8 @@ function App() {
 							setEditBusState({
 								...editBusState,
 								currentlyEditing: !currentlyEditing,
-							})
-						}}
-					>
+							});
+						}}>
 						Edit
 					</button>
 				)}
@@ -70,7 +72,7 @@ function App() {
 
 			<div className="busStops">{busStops}</div>
 		</>
-	)
+	);
 }
 
-export default App
+export default App;

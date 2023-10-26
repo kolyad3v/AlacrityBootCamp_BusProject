@@ -1,13 +1,13 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react'
 interface IBusStop {
-	busState: { peopleOnBus: number; totalSeats: number };
+	busState: { peopleOnBus: number; totalSeats: number }
 	setBusState: React.Dispatch<
 		React.SetStateAction<{
-			peopleOnBus: number;
-			totalSeats: number;
+			peopleOnBus: number
+			totalSeats: number
 		}>
-	>;
-	getAvailableSeats: () => number;
+	>
+	getAvailableSeats: () => number
 }
 
 const BusStop: FC<IBusStop> = ({
@@ -15,52 +15,58 @@ const BusStop: FC<IBusStop> = ({
 	setBusState,
 	getAvailableSeats,
 }) => {
-	const { peopleOnBus, totalSeats } = busState;
+	const { peopleOnBus, totalSeats } = busState
 
 	const [passengersWaitingAtBusStop, setPassengersWaitingAtBusStop] =
-		useState<string>("");
+		useState<string>('')
 
 	const [passengersGettingOffAtThisStop, setPassengersGettingOffAtThisStop] =
-		useState<string>("");
+		useState<string>('')
 
 	const setPassengerBusStopData = (atBusStop?: number): void => {
-		setPassengersGettingOffAtThisStop("");
+		setPassengersGettingOffAtThisStop('')
 
-		setPassengersWaitingAtBusStop(atBusStop ? atBusStop.toString() : "");
-	};
+		setPassengersWaitingAtBusStop(atBusStop ? atBusStop.toString() : '')
+	}
 
 	const getPassengerDataAsNumber = (passengerData: string): number => {
-		return passengerData === "" ? 0 : parseInt(passengerData);
-	};
+		return passengerData === '' ? 0 : parseInt(passengerData)
+	}
 
 	const getPeopleRemainingOnBusAfterDisembarkment = (): number => {
-		return peopleOnBus - getPassengerDataAsNumber(passengersGettingOffAtThisStop);
-	};
+		return (
+			peopleOnBus - getPassengerDataAsNumber(passengersGettingOffAtThisStop)
+		)
+	}
 
-	const updateStateAfterMorePassengersThanSeats = (passengers: number): void => {
-		let passengersLeftOver = passengers - getAvailableSeats();
-		setPassengerBusStopData(passengersLeftOver);
-		setBusState({ ...busState, peopleOnBus: totalSeats });
-	};
+	const updateStateAfterMorePassengersThanSeats = (
+		passengers: number
+	): void => {
+		let passengersLeftOver = passengers - getAvailableSeats()
+		setPassengerBusStopData(passengersLeftOver)
+		setBusState({ ...busState, peopleOnBus: totalSeats })
+	}
 
-	const updateStateAfterLessPassengersThanSeats = (passengers: number): void => {
+	const updateStateAfterLessPassengersThanSeats = (
+		passengers: number
+	): void => {
 		let peopleOnBusAfterPassengersGetOn =
-			getPeopleRemainingOnBusAfterDisembarkment() + passengers;
-		setBusState({ ...busState, peopleOnBus: peopleOnBusAfterPassengersGetOn });
-	};
+			getPeopleRemainingOnBusAfterDisembarkment() + passengers
+		setBusState({ ...busState, peopleOnBus: peopleOnBusAfterPassengersGetOn })
+	}
 
 	const handlePassengerChangeOverOnBusArrival = (): void => {
 		const passengersGettingOn = getPassengerDataAsNumber(
 			passengersWaitingAtBusStop
-		);
+		)
 		const passengersGettingOff = getPassengerDataAsNumber(
 			passengersGettingOffAtThisStop
-		);
+		)
 
 		if (passengersGettingOff > peopleOnBus) {
-			alert("More people cannot get off than there are people on the bus");
-			setPassengerBusStopData();
-			return;
+			alert('More people cannot get off than there are people on the bus')
+			setPassengerBusStopData()
+			return
 		}
 
 		if (
@@ -68,17 +74,17 @@ const BusStop: FC<IBusStop> = ({
 			passengersGettingOff === 0 &&
 			passengersGettingOn > 0
 		) {
-			alert("Aint no more room");
-			return;
+			alert('Aint no more room')
+			return
 		}
 
 		if (passengersGettingOn > getAvailableSeats()) {
-			updateStateAfterMorePassengersThanSeats(passengersGettingOn);
+			updateStateAfterMorePassengersThanSeats(passengersGettingOn)
 		} else {
-			updateStateAfterLessPassengersThanSeats(passengersGettingOn);
-			setPassengerBusStopData();
+			updateStateAfterLessPassengersThanSeats(passengersGettingOn)
+			setPassengerBusStopData()
 		}
-	};
+	}
 
 	return (
 		<>
@@ -102,12 +108,15 @@ const BusStop: FC<IBusStop> = ({
 					value={passengersGettingOffAtThisStop}
 					onChange={(e) => setPassengersGettingOffAtThisStop(e.target.value)}
 				/>
+				<button
+					className="busStop_button"
+					onClick={handlePassengerChangeOverOnBusArrival}
+				>
+					Handle Bus Arrival
+				</button>
 			</div>
-			<button onClick={handlePassengerChangeOverOnBusArrival}>
-				Handle Bus Arrival
-			</button>
 		</>
-	);
-};
+	)
+}
 
-export default BusStop;
+export default BusStop

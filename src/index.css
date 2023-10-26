@@ -74,8 +74,3 @@ form {
 	height: 160px;
 	justify-content: space-around;
 }
-
-.bus {
-	border: solid red 3px;
-	border-radius: 10px;
-}

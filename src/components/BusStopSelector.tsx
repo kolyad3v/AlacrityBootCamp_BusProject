@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 const BusStopSelector: FC<{
 	numberOfBusStops: number
-	setNumberOfBusStops: any
+	setNumberOfBusStops: React.Dispatch<React.SetStateAction<number>>
 }> = ({ numberOfBusStops, setNumberOfBusStops }) => {
 	const editBusStopsNumber = (num: number): void => {
 		let inc = (numberOfBusStops += num)
